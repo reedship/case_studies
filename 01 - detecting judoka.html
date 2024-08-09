@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2024-08-09 Fri 17:27 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Reed" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org5958b92">1. 01 - Detecting Judoka</a>
+<ul>
+<li><a href="#org001c61d">1.1. YoloV8</a></li>
+<li><a href="#orgc3aa80c">1.2. Person Detection</a></li>
+<li><a href="#org52202a6">1.3. Discerning Identity</a>
+<ul>
+<li><a href="#org18e1e02">1.3.1. BLUE</a></li>
+<li><a href="#orgcda82dc">1.3.2. WHITE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5958b92" class="outline-2">
+<h2 id="org5958b92"><span class="section-number-2">1.</span> 01 - Detecting Judoka</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Now that I've had some time to think about what all is necessary, the first step should not be detecting the mat, but detecting the judoka (a person who practices judo). This is for three important reasons.
+</p>
+
+<ol class="org-ol">
+<li>It's the most interesting part</li>
+<li>I want to do it first</li>
+<li>It's my project.</li>
+</ol>
+
+<p>
+And so with that we step into the fray.
+</p>
+</div>
+
+<div id="outline-container-org001c61d" class="outline-3">
+<h3 id="org001c61d"><span class="section-number-3">1.1.</span> YoloV8</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+There is a very well established open source library called `yolov8` which has built in pose recognition into it. This library is well used for object and face detection, and is very fast. This'll be helpful, as all of my development will be happening on a Mac Studio, which only supports CPU processing, and I'll have to do without the speed granted by GPU processing.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc3aa80c" class="outline-3">
+<h3 id="orgc3aa80c"><span class="section-number-3">1.2.</span> Person Detection</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Take the following example video of myself being thrown with koshi guruma.
+</p>
+
+<div>
+<iframe src="https://www.youtube.com/embed/hwZHroT8Hls" title="Koshi Guruma" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div>
+
+<p>
+Lets see what we can do about detecting the two judoka in the first frame of this video. First we'll use opencv to grab the first frame for testing purposes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #b6a0ff;">import</span> cv2
+<span style="color: #00d3d0;">vidcap</span> = cv2.VideoCapture(<span style="color: #79a8ff;">""</span>)
+<span style="color: #00d3d0;">success</span>, <span style="color: #00d3d0;">image</span> = vidcap.read()
+<span style="color: #b6a0ff;">if</span> success:
+    cv2.imwrite(<span style="color: #79a8ff;">"first_frame.jpg"</span>, image)
+</pre>
+</div>
+
+
+<p>
+Returns this frame:
+</p>
+
+
+<div id="orgb298811" class="figure">
+<p><img src="./assets/first_frame.jpg" alt="first_frame.jpg" />
+</p>
+</div>
+
+<p>
+Beautiful. Alright, first we need to run use the pretrained model to detect the individuals (myself in blue, and my friend and training partner Oscar in white) in this frame. We'll store the first frame in a `.jpg` file and then convert the image into a blob our model can read. After doing that, we can set the blob as the input to our model, and generate predictions from it.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #00d3d0;">image</span> = cv2.imread(first_frame_path)
+<span style="color: #00d3d0;">blob</span> = cv2.dnn.blobFromImage(image, 1/255.0, (INPUT_WIDTH, INPUT_HEIGHT), swapRB=<span style="color: #00bcff;">True</span>, crop=<span style="color: #00bcff;">False</span>)
+net.setInput(blob)
+<span style="color: #00d3d0;">output</span> = net.forward()
+<span style="color: #00d3d0;">preds</span> = output.transpose((0,2,1))
+<span style="color: #00d3d0;">rows</span> = preds[0].shape[0]
+</pre>
+</div>
+
+<p>
+Then we'll need to parse these rows to populate lists of `conf` (confidence), and `box` values (the boundaries of the detection). I've extracted this into a seperate method for future use.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">parseRows</span>(rows, shape):
+  <span style="color: #00d3d0;">confs</span>, <span style="color: #00d3d0;">boxes</span> = <span style="color: #f78fe7;">list</span>(),<span style="color: #f78fe7;">list</span>()
+  <span style="color: #00d3d0;">image_height</span>, <span style="color: #00d3d0;">image_width</span>, <span style="color: #00d3d0;">_</span> = shape
+  <span style="color: #00d3d0;">x_factor</span> = image_width / INPUT_WIDTH
+  <span style="color: #00d3d0;">y_factor</span> = image_height / INPUT_HEIGHT
+  <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> <span style="color: #f78fe7;">range</span>(rows):
+    <span style="color: #00d3d0;">row</span> = preds[0][i]
+    <span style="color: #00d3d0;">conf</span> = row[4]
+
+    <span style="color: #00d3d0;">classes_score</span> = row[4:]
+    <span style="color: #00d3d0;">_</span>,<span style="color: #00d3d0;">_</span>,<span style="color: #00d3d0;">_</span>, <span style="color: #00d3d0;">max_idx</span> = cv2.minMaxLoc(classes_score)
+    <span style="color: #00d3d0;">class_id</span> = max_idx[1]
+    <span style="color: #b6a0ff;">if</span> (classes_score[class_id] &gt; .25):
+      class_ids.append(label)
+
+      <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">get boxes</span>
+      <span style="color: #00d3d0;">x</span>,<span style="color: #00d3d0;">y</span>,<span style="color: #00d3d0;">w</span>,<span style="color: #00d3d0;">h</span> = row[0].item(), row[1].item(), row[2].item(), row[3].item()
+      <span style="color: #00d3d0;">left</span> = <span style="color: #f78fe7;">int</span>((x - 0.5 * w) * x_factor)
+      <span style="color: #00d3d0;">top</span> = <span style="color: #f78fe7;">int</span>((y - 0.5 * h) * y_factor)
+      <span style="color: #00d3d0;">width</span> = <span style="color: #f78fe7;">int</span>(w * x_factor)
+      <span style="color: #00d3d0;">height</span> = <span style="color: #f78fe7;">int</span>(h * y_factor)
+      <span style="color: #00d3d0;">box</span> = np.array([left, top, width, height])
+      boxes.append(box)
+
+  <span style="color: #b6a0ff;">return</span> confs, boxes
+</pre>
+</div>
+
+<p>
+For each of these we'll need to generate a way to store the position of each person for future use. Luckily opencv has a way to perform <a href="https://builtin.com/machine-learning/non-maximum-suppression">non-maximum suppression</a> using boxes and scores. Now we can draw where on the image a person was detected.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #00d3d0;">confs</span>, <span style="color: #00d3d0;">boxes</span> = parseRows(rows, image.shape)
+
+<span style="color: #00d3d0;">indexes</span> = cv2.dnn.NMSBoxes(boxes, confs, 0.25, 0.45)
+
+<span style="color: #00d3d0;">found_people</span> = [
+    [
+        boxes[i][0],  <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">left</span>
+        boxes[i][1],  <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">top</span>
+        boxes[i][2],  <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">width</span>
+        boxes[i][3],  <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">height</span>
+        confs[i],     <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">conf</span>
+        GI_COLOR.UNKNOWN  <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">Initial GI color</span>
+    ]
+    <span style="color: #b6a0ff;">for</span> i <span style="color: #b6a0ff;">in</span> indexes
+]
+
+<span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">Draw rectangles on the image</span>
+<span style="color: #b6a0ff;">for</span> person <span style="color: #b6a0ff;">in</span> found_people:
+    <span style="color: #00d3d0;">left</span>, <span style="color: #00d3d0;">top</span>, <span style="color: #00d3d0;">width</span>, <span style="color: #00d3d0;">height</span>, <span style="color: #00d3d0;">_</span>, <span style="color: #00d3d0;">_</span> = person
+    cv2.rectangle(image, (left, top), (left + width, top + height), (0, 255, 0), 3)
+</pre>
+</div>
+
+<p>
+Now we'll end up with the following image (cropped for presentation).
+</p>
+
+
+<div id="org1f123d7" class="figure">
+<p><img src="./assets/boundary box.jpg" alt="boundary box.jpg" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org52202a6" class="outline-3">
+<h3 id="org52202a6"><span class="section-number-3">1.3.</span> Discerning Identity</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+In competitive judo, there is usually one judoka in a blue gi, and one in a white. There are other uniform rules where both will wear white, with either a blue or a white belt, or a white and a red belt, but those formats will be ignored for initial MVP. On the IJF Tour and the Olympics, one competitor wears blue and one wears white, so that's what we'll be using for our project.
+</p>
+
+<p>
+But how can we know who is who? Judo is a sport built around movement and off-balancing of your opponent. Both competitors would frequently change sides of the video feed, pass in front of and behind each other, and change their height by bending/squatting/being thrown/etc, so there is no other way we can really discern who is who without detecting the color of the gi.
+</p>
+
+<p>
+We can take each boundary box, and crop to those pixel locations, and create smaller images to perform our operations on.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">getCroppedPlayerArea</span>(image, player):
+    <span style="color: #b6a0ff;">return</span> image[player[1]:player[1]+player[3], player[0]:player[0]+player[2]]
+
+<span style="color: #b6a0ff;">for</span> found <span style="color: #b6a0ff;">in</span> found_people:
+    <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">create a crop based on the pixel location to look at</span>
+    <span style="color: #00d3d0;">player_area</span>=getCroppedPlayerArea(image,found)
+    cv2.imwrite(f<span style="color: #79a8ff;">"./</span>{found[0]}<span style="color: #79a8ff;">-unaltered.jpg"</span>, player_area)
+</pre>
+</div>
+
+<p>
+Here is the result of cropping the image to just Oscar to show what I mean.
+</p>
+
+
+<div id="org5872d98" class="figure">
+<p><img src="./assets/538-unaltered.jpg" alt="538-unaltered.jpg" />
+</p>
+</div>
+
+<p>
+Once we have this unaltered crop, we can convert it grayscale and determine the gi color based on the amount of lighter pixels present. This isn't a very elegant way to do this, as it takes in the background and the skin color of the individual into account, and a good optimization for accuracy would have the image cropped to only show the gi, but that is a job for future me.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #b6a0ff;">def</span> <span style="color: #feacd0;">getGiColor</span>(grayscale_image):
+    <span style="color: #b6a0ff;">return</span> GI_COLOR.WHITE <span style="color: #b6a0ff;">if</span> (np.<span style="color: #f78fe7;">sum</span>(grayscale &gt;= 127) &gt; np.<span style="color: #f78fe7;">sum</span>(grayscale &lt;= 127)) <span style="color: #b6a0ff;">else</span> GI_COLOR.BLUE
+
+<span style="color: #b6a0ff;">for</span> found <span style="color: #b6a0ff;">in</span> found_people:
+    <span style="color: #989898; font-style: italic;"># </span><span style="color: #989898; font-style: italic;">create a crop based on the pixel location to look at</span>
+    <span style="color: #00d3d0;">player_area</span>=getCroppedPlayerArea(image,found)
+    cv2.imwrite(f<span style="color: #79a8ff;">"./</span>{found[0]}<span style="color: #79a8ff;">-unaltered.jpg"</span>, player_area)
+    <span style="color: #00d3d0;">grayscale</span> = cv2.cvtColor(player_area, cv2.COLOR_BGR2GRAY)
+    <span style="color: #00d3d0;">found</span>[5] = getGiColor(grayscale)
+    <span style="color: #f78fe7;">print</span>(f<span style="color: #79a8ff;">"Found player with </span>{found[5]}<span style="color: #79a8ff;">"</span>)
+    cv2.imwrite(f<span style="color: #79a8ff;">"./</span>{found[5]}<span style="color: #79a8ff;">.jpg"</span>, grayscale)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org18e1e02" class="outline-4">
+<h4 id="org18e1e02"><span class="section-number-4">1.3.1.</span> BLUE</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+This cropped grayscale image has a total of 24416 out of 8653701 total pixels greater than 127, and 87404 characters less than 127, so it's more dark than it is bright. This means it must be our blue gi.
+</p>
+
+
+<div id="orgd9adfa4" class="figure">
+<p><img src="./assets/GI_COLOR.BLUE.jpg" alt="GI_COLOR.BLUE.jpg" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcda82dc" class="outline-4">
+<h4 id="orgcda82dc"><span class="section-number-4">1.3.2.</span> WHITE</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+This cropped grayscale image has a total of 44877 out of 10441142 total pixels greater than 127, and 29431 characters less than 127, so it's more bright than it is dark. This means it must be our white gi.
+</p>
+
+
+<div id="org2f4bfb9" class="figure">
+<p><img src="./assets/GI_COLOR.WHITE.jpg" alt="GI_COLOR.WHITE.jpg" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-result"># results in:
+Found player with GI_COLOR.BLUE
+Found player with GI_COLOR.WHITE
+</pre>
+</div>
+
+<p>
+And now we can tell who is who! Oscar is in white, and I am in blue.
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Reed</p>
+<p class="date">Created: 2024-08-09 Fri 17:27</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
