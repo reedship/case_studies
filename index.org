@@ -1,0 +1,7 @@
+#+OPTIONS: toc:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./assets/retro_dark.css" />
+
+Here you'll find some writings in the order they were written, with the most recent at the top. All works within are my own personal opinion and do not reflect the opinions of my employers, sponsors, family, friends, or even acquaintences.
+
+- [[file:01 - detecting judoka.html][Judo and Deep Learning: 01 Detecting Judoka]]
+- [[file:judo and deep learning.html][Judo and Deep Learning]]

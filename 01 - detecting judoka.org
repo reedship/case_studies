@@ -71,8 +71,6 @@ Then we'll need to parse these rows to populate lists of ~conf~ (confidence, or 
       _,_,_, max_idx = cv2.minMaxLoc(classes_score)
       class_id = max_idx[1]
       if (classes_score[class_id] > .25):
-	class_ids.append(label)
-
 	# get boxes
 	x,y,w,h = row[0].item(), row[1].item(), row[2].item(), row[3].item()
 	left = int((x - 0.5 * w) * x_factor)
