@@ -1,16 +1,20 @@
 * 01 - Detecting Judoka
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./assets/retro_dark.css" />
 Now that I've had some time to think about what all is necessary, the first step should not be detecting the mat, but detecting the judoka (a person who practices judo). This is for three important reasons.
 
 1. It's the most interesting part
 2. I want to do it first
 3. It's my project.
 
-And so with that we step into the fray.
+A quick note that as we get into the actual implementation of this, there will be more and more code used, and these code snippets are intended to give a glimpse of the process, not the full source code. Any examples presented within are not guaranteed to work, yadda yadda yadda, and so on.
 
-** YoloV8
+Finally, we step into the fray.
 
-There is a very well established open source library called `yolov8` which has built in pose recognition into it. This library is well used for object and face detection, and is very fast. This'll be helpful, as all of my development will be happening on a Mac Studio, which only supports CPU processing, and I'll have to do without the speed granted by GPU processing.
+** Not Reinventing the Wheel
+
+I could absolutely build an entire neural network and pose estimation library myself, but that would be a huge waste of time and I'd never get anything off the ground.
+
+There is a very well established open source library called ~yolov8~ which has built in pose recognition into it. This library is well used for object and face detection, and is very fast. This'll be helpful, as all of my development will be happening on a Mac Studio, which only supports CPU processing, and I'll have to do without the speed granted by GPU processing.
 
 ** Person Detection
 
@@ -23,7 +27,9 @@ Take the following example video of myself being thrown with koshi guruma.
 <div>
 #+END_EXPORT
 
-Lets see what we can do about detecting the two judoka in the first frame of this video. First we'll use opencv to grab the first frame for testing purposes.
+Lets see what we can do about detecting the two judoka in the first frame of this video, for starters. Videos are just a bunch of pictures in a row, so if we can't do it on one frame, we can't do it at all.
+
+First we'll use opencv to grab the first frame for testing purposes.
 
 #+begin_src python
   import cv2
@@ -38,7 +44,7 @@ Returns this frame:
 
 [[./assets/first_frame.jpg]]
 
-Beautiful. Alright, first we need to run use the pretrained model to detect the individuals (myself in blue, and my friend and training partner Oscar in white) in this frame. We'll store the first frame in a `.jpg` file and then convert the image into a blob our model can read. After doing that, we can set the blob as the input to our model, and generate predictions from it.
+Beautiful. Alright, first we need to use the pretrained ~yolov8n-pose~ model to detect the individuals (myself in blue, and my friend and training partner Oscar in white) in this frame. We'll store the first frame in a ~.jpg~ file and then convert the image into a blob our model can read. After doing that, we can set the blob as the input to our model, and generate predictions from it.
 
 #+begin_src python
   image = cv2.imread(first_frame_path)
@@ -49,7 +55,7 @@ Beautiful. Alright, first we need to run use the pretrained model to detect the 
   rows = preds[0].shape[0]
 #+end_src
 
-Then we'll need to parse these rows to populate lists of `conf` (confidence), and `box` values (the boundaries of the detection). I've extracted this into a seperate method for future use.
+Then we'll need to parse these rows to populate lists of ~conf~ (confidence, or how sure the model is that a person is there), and ~box~ values (the boundaries of the detection). I've extracted this into a seperate method for future use.
 
 #+begin_src python
   def parseRows(rows, shape):
@@ -148,13 +154,13 @@ Once we have this unaltered crop, we can convert it grayscale and determine the 
 
 *** BLUE
 
-This cropped grayscale image has a total of 24416 out of 8653701 total pixels greater than 127, and 87404 characters less than 127, so it's more dark than it is bright. This means it must be our blue gi.
+This cropped grayscale image has a total of ~24416 / 8653701~ total pixels greater than 127, and ~87404 / 8653701~ characters less than 127, so it's more dark than it is bright. This means it must be our blue gi.
 
 [[./assets/GI_COLOR.BLUE.jpg]]
 
 *** WHITE
 
-This cropped grayscale image has a total of 44877 out of 10441142 total pixels greater than 127, and 29431 characters less than 127, so it's more bright than it is dark. This means it must be our white gi.
+This cropped grayscale image has a total of ~44877 / 10441142~ total pixels greater than 127, and ~29431 / 10441142~ characters less than 127, so it's more bright than it is dark. This means it must be our white gi.
 
 [[./assets/GI_COLOR.WHITE.jpg]]
 

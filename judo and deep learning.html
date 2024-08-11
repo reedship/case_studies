@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-07-30 Tue 08:49 -->
+<!-- 2024-08-10 Sat 15:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -193,9 +193,39 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { }
 </style>
+<link rel="stylesheet" type="text/css" href="./assets/retro_dark.css" />
 </head>
 <body>
 <div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgb93a30f">1. Judo and Deep Learning</a>
+<ul>
+<li><a href="#orgcf61892">1.1. A Brief Introduction</a></li>
+<li><a href="#orgd02519c">1.2. Athlete Progression in Judo</a></li>
+<li><a href="#orgbe90232">1.3. The Idea</a>
+<ul>
+<li><a href="#orgd5ec1c0">1.3.1. The Scale of the Problem</a></li>
+<li><a href="#orgfef1595">1.3.2. The Variety</a></li>
+<li><a href="#org2ef8482">1.3.3. The Training Data</a></li>
+</ul>
+</li>
+<li><a href="#org9aced2c">1.4. To Everyone Else</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb93a30f" class="outline-2">
+<h2 id="orgb93a30f"><span class="section-number-2">1.</span> Judo and Deep Learning</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+
+<div id="outline-container-orgcf61892" class="outline-3">
+<h3 id="orgcf61892"><span class="section-number-3">1.1.</span> A Brief Introduction</h3>
+<div class="outline-text-3" id="text-1-1">
 <p>
 I'm a software engineer in my day to day work, and I spend most of my time building and fixing APIs. Occasionally, I will find myself building a small internal tool to solve some niche problem, but my work is very ordinary and 'run of the mill'. I'm not being self-deprecating, but I think it's fair to say that my career and technical abilities are pretty average.
 </p>
@@ -205,17 +235,31 @@ I am not incredibly passionate about programming, but I love Judo. Judo, or `the
 </p>
 
 <p>
-Since starting Judo, I've gotten back into the best shape of my life, found new friends, traveled around the state to compete at tournaments, and attended training camps run by former olympians to try to learn as much as possible, so that I could be a little bit better. Training Judo, in and of itself, is something I find incredibly satisfying. I'm still very early on in my training, but I see myself continuing this for as long as my body is able to do it.
+Since starting Judo, I've gotten back into the best shape of my life, found new friends, traveled around the state to compete at tournaments, and attended training camps run by former olympians to try to learn as much as possible so that I could be a little bit better. Training Judo, in and of itself, is something I find incredibly satisfying. I'm still very early on in my training, but I see myself continuing this for as long as my body is able to do it.
 </p>
 
 <p>
 The market for programmers is very turbulent right now, and it seems like every few months there are a new string of layoffs where very educated and talented engineers are suddenly out of work. I had a less than optimum entry into programming so I feel like if these highly pedigreed individuals are getting laid off, it's only a matter of time before the market shifts for me as well. I don't have a bachelors degree, or even an associates, and my skill set doesn't set me apart from the crowd. With this in mind, I decided to expand that skill set with something that seems very in demand now and in the future, Machine Learning.
 </p>
+</div>
+</div>
 
+<div id="outline-container-orgd02519c" class="outline-3">
+<h3 id="orgd02519c"><span class="section-number-3">1.2.</span> Athlete Progression in Judo</h3>
+<div class="outline-text-3" id="text-1-2">
 <p>
-Coaching for competition in Judo is still very 'old-school' in many places. The coach says "stay aggressive", "keep your feet moving", "don't let them get their dominant grip", etc, and the athlete does their best to follow this advice, but learns most of their weaknesses through a painful and straightforward curriculum of getting thrown by someone who exploits those weaknesses over and over. This is 100% expected with a combat sport and I'm not arguing against it. However, there has to be a more data-driven way to discover these weaknesses.
+It seems that, with small exception, most Judo clubs in the states run a similiar schedule for their classes. A brief warm up, some rolls and ukemi (break falls), followed by 30 minutes to an hour of drills around a specific technique of the instructors choosing (usually without a formal schedule or plan), and a couple rounds of randori (sparring, or 'free practice') at the end. There are many talented people who are pushing for a more data-driven coaching style (<a href="http://www.christopherround.com">Chris Round comes to mind</a>), but it still feels like the minority opinion.
 </p>
 
+<p>
+Coaching for competition in Judo is still very 'old-school' in many places. The coach says "stay aggressive", "keep your feet moving", "don't let them get their dominant grip", etc, and the athlete does their best to follow this advice, but learns most of their faults through a painful pattern of getting thrown by someone who exploits those weaknesses over and over. This is 100% expected with a combat sport and I'm not arguing against it, since techniques don't reside in a vacuum and only exist in the context of the fight. If you cannot perform the technique against a fully resisting opponent, you can't say you have mastered it. However, there has to be a more data-driven way to discover these weaknesses.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbe90232" class="outline-3">
+<h3 id="orgbe90232"><span class="section-number-3">1.3.</span> The Idea</h3>
+<div class="outline-text-3" id="text-1-3">
 <p>
 Here is my hypothetical miracle product: a video analyzer that detects techniques (and their success rates), positions (whether the athlete is gripping standard sleeve + label, double sleeve, etc), shidos (penalties in judo), and logs these results to a usable format. A coach could look at these results and say, "you are never successful with Osoto Gari off of a cross grip", or "You are thrown 50% of the time when your opponent gets an overhand grip, we'll need to drill that position more often". Athletes could see a clear progression for their training, and coaches could know they are maximizing their time with each athlete.
 </p>
@@ -223,24 +267,61 @@ Here is my hypothetical miracle product: a video analyzer that detects technique
 <p>
 There are a couple of problems here.
 </p>
+</div>
 
-<ol class="org-ol">
-<li>This is a huge scope, and we'll need to simplify this greatly for a proof of concept. Starting with detecting basic shido conditions seems like the easiest first step.</li>
-<li>The number and variations of techniques in judo are quite large, assuming we are only discussing nage-waza (throwing techniques), and excluding all Ne Waza (ground techniques) as a starting point.
-<ol class="org-ol">
-<li>my goal would be to include these in the training set as well, though it's more likely that will be treated as it's own serious undertaking.</li>
-</ol></li>
-<li>Building a training set will take a large amount of time. In order to properly train this model, I'll need a wide variety of athletes performing the techniques with a large amount of camera angles. It's possible that building the training set could take longer than the actual training of the model. I don't know as much as I'd like to about this section, but I can forsee issues if I only train the model on videos of myself being thrown. The likelihood of bias in the predictions of such a model is pretty high.</li>
-</ol>
+<div id="outline-container-orgd5ec1c0" class="outline-4">
+<h4 id="orgd5ec1c0"><span class="section-number-4">1.3.1.</span> The Scale of the Problem</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+This is a huge scope, and we'll need to simplify this greatly for a proof of concept. Starting with detecting basic shido conditions instead of techniques applied seems like the easiest first step.
+</p>
+</div>
+</div>
 
+<div id="outline-container-orgfef1595" class="outline-4">
+<h4 id="orgfef1595"><span class="section-number-4">1.3.2.</span> The Variety</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+The number and variations of techniques in judo are quite large, assuming we are only discussing nage-waza (throwing techniques), and excluding all Ne Waza (ground techniques) as a starting point.
+</p>
 
 <p>
-It is on this note that I would like to ask for your help. If you are a Judoka, and feel comfortable filming yourself performing any of the techniques in the <a href="https://judoinfo.com/gokyo1/">Gokyo no Waza</a> please send them to me! If you feel up to editing, then small 2-3 second video of just the technique being performed will suffice. If you would like to send an unedited video and leave the clipping to me, that is totally ok! If you are a Judo content creator, and you don't mind me using your catalog of videos to help create this dataset, please let me know. 
+My goal would be to include these in the training set as well, though it's more likely that will be treated as it's own serious undertaking.
 </p>
+</div>
+</div>
+
+<div id="outline-container-org2ef8482" class="outline-4">
+<h4 id="org2ef8482"><span class="section-number-4">1.3.3.</span> The Training Data</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<p>
+Building a training set will take a large amount of time. In order to properly train this model, I'll need a wide variety of athletes performing the techniques with a large amount of camera angles. It's possible that building the training set could take longer than the actual training of the model.
+</p>
+
+<p>
+I don't know as much as I'd like to about this section of machine learning, but I can forsee issues if I only train the model on videos of myself being thrown. The likelihood of bias in the predictions of such a model is pretty high.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9aced2c" class="outline-3">
+<h3 id="org9aced2c"><span class="section-number-3">1.4.</span> To Everyone Else</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+It is on this note that I would like to ask for your help. If you are a Judoka, and feel comfortable filming yourself performing any of the techniques in the <a href="https://judoinfo.com/gokyo1/">Gokyo no Waza</a> please send them to me! If you feel up to editing, then small 2-3 second video of just the technique being performed will suffice. If you would like to send an unedited video and leave the clipping to me, that is totally ok! If you are a Judo content creator, and you don't mind me using your catalog of videos to help create this dataset, please let me know.
+</p>
+
+<p>
+Please proceed to <a href="01 - detecting judoka.html">the first entry in this case study</a> for more information.
+</p>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Reed</p>
-<p class="date">Created: 2024-07-30 Tue 08:49</p>
+<p class="date">Created: 2024-08-10 Sat 15:11</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

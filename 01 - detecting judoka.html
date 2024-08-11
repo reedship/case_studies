@@ -3,18 +3,197 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-08-09 Fri 17:27 -->
+<!-- 2024-08-10 Sat 15:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
 <meta name="author" content="Reed" />
 <meta name="generator" content="Org Mode" />
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="./assets/retro_dark.css" />
 </head>
 <body>
 <div id="content" class="content">
@@ -22,14 +201,14 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org5958b92">1. 01 - Detecting Judoka</a>
+<li><a href="#orgce02299">1. 01 - Detecting Judoka</a>
 <ul>
-<li><a href="#org001c61d">1.1. YoloV8</a></li>
-<li><a href="#orgc3aa80c">1.2. Person Detection</a></li>
-<li><a href="#org52202a6">1.3. Discerning Identity</a>
+<li><a href="#org6a3314b">1.1. Not Reinventing the Wheel</a></li>
+<li><a href="#orgee8e02f">1.2. Person Detection</a></li>
+<li><a href="#org0cb20f2">1.3. Discerning Identity</a>
 <ul>
-<li><a href="#org18e1e02">1.3.1. BLUE</a></li>
-<li><a href="#orgcda82dc">1.3.2. WHITE</a></li>
+<li><a href="#org25c771a">1.3.1. BLUE</a></li>
+<li><a href="#orgd4cb323">1.3.2. WHITE</a></li>
 </ul>
 </li>
 </ul>
@@ -37,8 +216,8 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org5958b92" class="outline-2">
-<h2 id="org5958b92"><span class="section-number-2">1.</span> 01 - Detecting Judoka</h2>
+<div id="outline-container-orgce02299" class="outline-2">
+<h2 id="orgce02299"><span class="section-number-2">1.</span> 01 - Detecting Judoka</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Now that I've had some time to think about what all is necessary, the first step should not be detecting the mat, but detecting the judoka (a person who practices judo). This is for three important reasons.
@@ -51,21 +230,29 @@ Now that I've had some time to think about what all is necessary, the first step
 </ol>
 
 <p>
-And so with that we step into the fray.
+A quick note that as we get into the actual implementation of this, there will be more and more code used, and these code snippets are intended to give a glimpse of the process, not the full source code. Any examples presented within are not guaranteed to work, yadda yadda yadda, and so on.
+</p>
+
+<p>
+Finally, we step into the fray.
 </p>
 </div>
 
-<div id="outline-container-org001c61d" class="outline-3">
-<h3 id="org001c61d"><span class="section-number-3">1.1.</span> YoloV8</h3>
+<div id="outline-container-org6a3314b" class="outline-3">
+<h3 id="org6a3314b"><span class="section-number-3">1.1.</span> Not Reinventing the Wheel</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-There is a very well established open source library called `yolov8` which has built in pose recognition into it. This library is well used for object and face detection, and is very fast. This'll be helpful, as all of my development will be happening on a Mac Studio, which only supports CPU processing, and I'll have to do without the speed granted by GPU processing.
+I could absolutely build an entire neural network and pose estimation library myself, but that would be a huge waste of time and I'd never get anything off the ground.
+</p>
+
+<p>
+There is a very well established open source library called <code>yolov8</code> which has built in pose recognition into it. This library is well used for object and face detection, and is very fast. This'll be helpful, as all of my development will be happening on a Mac Studio, which only supports CPU processing, and I'll have to do without the speed granted by GPU processing.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc3aa80c" class="outline-3">
-<h3 id="orgc3aa80c"><span class="section-number-3">1.2.</span> Person Detection</h3>
+<div id="outline-container-orgee8e02f" class="outline-3">
+<h3 id="orgee8e02f"><span class="section-number-3">1.2.</span> Person Detection</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Take the following example video of myself being thrown with koshi guruma.
@@ -77,7 +264,11 @@ Take the following example video of myself being thrown with koshi guruma.
 <div>
 
 <p>
-Lets see what we can do about detecting the two judoka in the first frame of this video. First we'll use opencv to grab the first frame for testing purposes.
+Lets see what we can do about detecting the two judoka in the first frame of this video, for starters. Videos are just a bunch of pictures in a row, so if we can't do it on one frame, we can't do it at all.
+</p>
+
+<p>
+First we'll use opencv to grab the first frame for testing purposes.
 </p>
 
 <div class="org-src-container">
@@ -95,13 +286,13 @@ Returns this frame:
 </p>
 
 
-<div id="orgb298811" class="figure">
+<div id="org0db2f3a" class="figure">
 <p><img src="./assets/first_frame.jpg" alt="first_frame.jpg" />
 </p>
 </div>
 
 <p>
-Beautiful. Alright, first we need to run use the pretrained model to detect the individuals (myself in blue, and my friend and training partner Oscar in white) in this frame. We'll store the first frame in a `.jpg` file and then convert the image into a blob our model can read. After doing that, we can set the blob as the input to our model, and generate predictions from it.
+Beautiful. Alright, first we need to use the pretrained <code>yolov8n-pose</code> model to detect the individuals (myself in blue, and my friend and training partner Oscar in white) in this frame. We'll store the first frame in a <code>.jpg</code> file and then convert the image into a blob our model can read. After doing that, we can set the blob as the input to our model, and generate predictions from it.
 </p>
 
 <div class="org-src-container">
@@ -115,7 +306,7 @@ net.setInput(blob)
 </div>
 
 <p>
-Then we'll need to parse these rows to populate lists of `conf` (confidence), and `box` values (the boundaries of the detection). I've extracted this into a seperate method for future use.
+Then we'll need to parse these rows to populate lists of <code>conf</code> (confidence, or how sure the model is that a person is there), and <code>box</code> values (the boundaries of the detection). I've extracted this into a seperate method for future use.
 </p>
 
 <div class="org-src-container">
@@ -180,15 +371,15 @@ Now we'll end up with the following image (cropped for presentation).
 </p>
 
 
-<div id="org1f123d7" class="figure">
+<div id="orgdc16d01" class="figure">
 <p><img src="./assets/boundary box.jpg" alt="boundary box.jpg" />
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org52202a6" class="outline-3">
-<h3 id="org52202a6"><span class="section-number-3">1.3.</span> Discerning Identity</h3>
+<div id="outline-container-org0cb20f2" class="outline-3">
+<h3 id="org0cb20f2"><span class="section-number-3">1.3.</span> Discerning Identity</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 In competitive judo, there is usually one judoka in a blue gi, and one in a white. There are other uniform rules where both will wear white, with either a blue or a white belt, or a white and a red belt, but those formats will be ignored for initial MVP. On the IJF Tour and the Olympics, one competitor wears blue and one wears white, so that's what we'll be using for our project.
@@ -218,7 +409,7 @@ Here is the result of cropping the image to just Oscar to show what I mean.
 </p>
 
 
-<div id="org5872d98" class="figure">
+<div id="orge70b99a" class="figure">
 <p><img src="./assets/538-unaltered.jpg" alt="538-unaltered.jpg" />
 </p>
 </div>
@@ -243,30 +434,30 @@ Once we have this unaltered crop, we can convert it grayscale and determine the 
 </div>
 </div>
 
-<div id="outline-container-org18e1e02" class="outline-4">
-<h4 id="org18e1e02"><span class="section-number-4">1.3.1.</span> BLUE</h4>
+<div id="outline-container-org25c771a" class="outline-4">
+<h4 id="org25c771a"><span class="section-number-4">1.3.1.</span> BLUE</h4>
 <div class="outline-text-4" id="text-1-3-1">
 <p>
-This cropped grayscale image has a total of 24416 out of 8653701 total pixels greater than 127, and 87404 characters less than 127, so it's more dark than it is bright. This means it must be our blue gi.
+This cropped grayscale image has a total of <code>24416 / 8653701</code> total pixels greater than 127, and <code>87404 / 8653701</code> characters less than 127, so it's more dark than it is bright. This means it must be our blue gi.
 </p>
 
 
-<div id="orgd9adfa4" class="figure">
+<div id="org4b7f26a" class="figure">
 <p><img src="./assets/GI_COLOR.BLUE.jpg" alt="GI_COLOR.BLUE.jpg" />
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgcda82dc" class="outline-4">
-<h4 id="orgcda82dc"><span class="section-number-4">1.3.2.</span> WHITE</h4>
+<div id="outline-container-orgd4cb323" class="outline-4">
+<h4 id="orgd4cb323"><span class="section-number-4">1.3.2.</span> WHITE</h4>
 <div class="outline-text-4" id="text-1-3-2">
 <p>
-This cropped grayscale image has a total of 44877 out of 10441142 total pixels greater than 127, and 29431 characters less than 127, so it's more bright than it is dark. This means it must be our white gi.
+This cropped grayscale image has a total of <code>44877 / 10441142</code> total pixels greater than 127, and <code>29431 / 10441142</code> characters less than 127, so it's more bright than it is dark. This means it must be our white gi.
 </p>
 
 
-<div id="org2f4bfb9" class="figure">
+<div id="org8b4a222" class="figure">
 <p><img src="./assets/GI_COLOR.WHITE.jpg" alt="GI_COLOR.WHITE.jpg" />
 </p>
 </div>
@@ -288,7 +479,7 @@ And now we can tell who is who! Oscar is in white, and I am in blue.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Reed</p>
-<p class="date">Created: 2024-08-09 Fri 17:27</p>
+<p class="date">Created: 2024-08-10 Sat 15:25</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
